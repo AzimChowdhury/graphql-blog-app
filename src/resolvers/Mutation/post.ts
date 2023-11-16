@@ -76,8 +76,35 @@ export const postResolvers = {
     });
 
     return {
-      message: "post updated successfully",
+      message: "post deleted successfully",
       post: deletePost,
+    };
+  },
+  publishPost: async (parent: any, args: any, { prisma, userId }: any) => {
+    if (!userId) {
+      return {
+        message: "Unauthorized",
+        post: null,
+      };
+    }
+
+    const error = await checkingUser(prisma, userId, args.postId);
+    if (error) {
+      return error;
+    }
+
+    const publishPost = await prisma.post.update({
+      where: {
+        id: args.postId,
+      },
+      data: {
+        published: true,
+      },
+    });
+
+    return {
+      message: "post published successfully",
+      post: publishPost,
     };
   },
 };
