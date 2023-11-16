@@ -24,6 +24,14 @@ export const typeDefs = `#graphql
             content:String!
             ): postPayload,
 
+        updatePost(
+            postId :ID!
+            title:String
+            content:String
+        ): postPayload
+
+
+
 
     }
 
