@@ -11,12 +11,17 @@ export const typeDefs = `#graphql
             name:String!,
             email:String!,
             password:String!,
-            ): UserArgs
+            ): authPayload,
+
+        signin(
+            email:String!,
+            password:String!,
+            ): authPayload,
     }
 
-type UserArgs {
-    token: String!
-    message: String!
+type authPayload {
+    token: String
+    message: String
 }
 
     type Post {
