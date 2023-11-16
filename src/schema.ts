@@ -29,7 +29,10 @@ export const typeDefs = `#graphql
             title:String
             content:String
         ): postPayload
-
+        
+        deletePost(
+            postId :ID!
+        ): postPayload
 
 
 

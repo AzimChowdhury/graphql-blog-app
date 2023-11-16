@@ -1,3 +1,5 @@
+import { checkingUser } from "../../utils/checkingUser";
+
 export const postResolvers = {
   addPost: async (parent: any, args: any, { prisma, userId }: any) => {
     if (!userId) {
@@ -33,36 +35,10 @@ export const postResolvers = {
         post: null,
       };
     }
-    const user = await prisma.user.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-    if (!user) {
-      return {
-        message: "User not found",
-        post: null,
-      };
-    }
 
-    const post = await prisma.post.findUnique({
-      where: {
-        id: args.postId,
-      },
-    });
-
-    if (!post) {
-      return {
-        message: "Post does not exist",
-        post: null,
-      };
-    }
-
-    if (post.authorId !== user.id) {
-      return {
-        message: "Unauthorized",
-        post: null,
-      };
+    const error = await checkingUser(prisma, userId, args.postId);
+    if (error) {
+      return error;
     }
 
     const updatePost = await prisma.post.update({
@@ -78,6 +54,30 @@ export const postResolvers = {
     return {
       message: "post updated successfully",
       post: updatePost,
+    };
+  },
+  deletePost: async (parent: any, args: any, { prisma, userId }: any) => {
+    if (!userId) {
+      return {
+        message: "Unauthorized",
+        post: null,
+      };
+    }
+
+    const error = await checkingUser(prisma, userId, args.postId);
+    if (error) {
+      return error;
+    }
+
+    const deletePost = await prisma.post.delete({
+      where: {
+        id: args.postId,
+      },
+    });
+
+    return {
+      message: "post updated successfully",
+      post: deletePost,
     };
   },
 };
