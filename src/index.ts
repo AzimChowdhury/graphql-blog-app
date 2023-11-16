@@ -3,6 +3,7 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 import { typeDefs } from "./schema";
 import { resolvers } from "./resolvers";
 import { PrismaClient } from "@prisma/client";
+import { getUserInfoFromToken } from "./utils/jwtHelper";
 const prisma = new PrismaClient();
 
 (async () => {
@@ -13,8 +14,15 @@ const prisma = new PrismaClient();
 
   const { url } = await startStandaloneServer(server, {
     listen: { port: 4000 },
-    context: async () => {
-      return { prisma };
+    context: async ({ req }) => {
+      const userId = await getUserInfoFromToken(
+        req.headers.authorization as string
+      );
+
+      return {
+        prisma,
+        userId,
+      };
     },
   });
 

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "license": "MIT",
+  "author": "faijul-azim",
   "scripts": {
     "dev": "nodemon --watch './**/*.ts' --exec ts-node src/index.ts"
   },
