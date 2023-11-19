@@ -4,7 +4,7 @@ import { typeDefs } from "./schema";
 import { resolvers } from "./resolvers";
 import { PrismaClient } from "@prisma/client";
 import { getUserInfoFromToken } from "./utils/jwtHelper";
-const prisma = new PrismaClient();
+export const prisma = new PrismaClient();
 
 (async () => {
   const server = new ApolloServer({
